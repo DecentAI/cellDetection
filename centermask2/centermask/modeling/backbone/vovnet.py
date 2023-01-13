@@ -205,6 +205,8 @@ class DFConv3x3(nn.Module):
 def conv3x3(in_channels, out_channels, module_name, postfix, 
               stride=1, groups=1, kernel_size=3, padding=1):
     """3x3 convolution with padding"""
+   
+   
     return [
         (f'{module_name}_{postfix}/conv',
          nn.Conv2d(in_channels, 
@@ -215,7 +217,8 @@ def conv3x3(in_channels, out_channels, module_name, postfix,
                     groups=groups, 
                     bias=False)),
         (f'{module_name}_{postfix}/norm', get_norm(_NORM, out_channels)),
-        (f'{module_name}_{postfix}/relu', nn.ReLU(inplace=True))
+        (f'{module_name}_{postfix}/relu', nn.ReLU(inplace=True)),
+        (f'{module_name}_{postfix}/dropout', nn.Dropout(0.3))
     ]
 
 
@@ -232,7 +235,8 @@ def conv1x1(in_channels, out_channels, module_name, postfix,
                     groups=groups,
                     bias=False)),
         (f'{module_name}_{postfix}/norm', get_norm(_NORM, out_channels)),
-        (f'{module_name}_{postfix}/relu', nn.ReLU(inplace=True))
+        (f'{module_name}_{postfix}/relu', nn.ReLU(inplace=True)),
+        (f'{module_name}_{postfix}/dropout', nn.Dropout(0.3))
     ]
 
 class Hsigmoid(nn.Module):
@@ -403,12 +407,16 @@ class VoVNet(Backbone):
 
         self._out_features = out_features
 
-
+        self.dropout = nn.Dropout(p=0.3)
+        print("came here for VoVNet")
         # Stem module
         conv_type = dw_conv3x3 if depthwise else conv3x3
-        stem = conv3x3(input_ch, stem_ch[0], "stem", "1", 2)
+        stem =conv3x3(input_ch, stem_ch[0], "stem", "1", 2)
+        # stem += self.dropout(stem)
         stem += conv_type(stem_ch[0], stem_ch[1], "stem", "2", 1)
+        # stem += self.dropout(stem) 
         stem += conv_type(stem_ch[1], stem_ch[2], "stem", "3", 2)
+        # stem += self.dropout(stem)
         self.add_module("stem", nn.Sequential((OrderedDict(stem))))
         current_stirde = 4
         self._out_feature_strides = {"stem": current_stirde, "stage2": current_stirde}
