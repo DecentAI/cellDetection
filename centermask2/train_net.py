@@ -6,7 +6,7 @@ from collections import OrderedDict
 import torch
 
 from detectron2.data.datasets import register_coco_instances
-register_coco_instances("MCF7", {}, "/lunit/home/stevekang/decentAI/cellDetection/MCF7/LIVECell_dataset_2021/annotations/LIVECell_single_cells/mcf7/train.json","/lunit/home/stevekang/decentAI/cellDetection/MCF7/LIVECell_dataset_2021/images/livecell_train_val_images" )
+register_coco_instances("MCF7", {}, "/lunit/home/stevekang/decentAI/MCF7/LIVECell_dataset_2021/annotations/LIVECell_single_cells/mcf7/train.json","/lunit/home/stevekang/decentAI/MCF7/LIVECell_dataset_2021/images/livecell_train_val_images" )
 
 import detectron2.utils.comm as comm
 from detectron2.data import MetadataCatalog

@@ -21,13 +21,13 @@ class CellDataset(Dataset):
     
     def __getitem__(self, idx):
         if idx < self.no_of_ims:
+
             name = self.images[idx]
             image = np.array(io.imread(name),dtype=np.float32)
             mask_name = name.replace(".tif","_mask.png")
             mask_name = mask_name.replace("_images/","_images_masks/")
             mask = np.array(io.imread(mask_name),dtype=np.float32)
-            # binarize mask 0 - background 1-foreground
-            # print("Img :", self.images[idx], "mask : ", self.masks[idx])
+
             mask[mask==255.0] = 1.0        
         else:
             print('set idx out of bound!')

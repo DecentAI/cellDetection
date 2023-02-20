@@ -14,6 +14,7 @@ from sklearn.metrics import average_precision_score
 
 
 def save_checkpoint(state, filename="my_checkpoint_UNet3_large_epoch.pth.tar"):
+
     print("=> Saving checkpoint")
     torch.save(state, filename)
 
@@ -81,15 +82,18 @@ def count_cells(pred_mask, t=65,name="test"):
     return len(contours)
 
 
+
 def check_accuracy(loader, model, device="cuda"):
     num_correct = 0
     num_pixels = 0
     dice_score = 0
     model.eval()
+<<<<<<< HEAD
     num_total_cell = 0
     num_pred_cell = 0
     ap = 0 
     total_num = 0
+
     with torch.no_grad():
         for x, y in loader:
             real = y
@@ -141,6 +145,7 @@ def check_accuracy(loader, model, device="cuda"):
             ap +=  precision/2
             total_num += 1
 
+
     print(
         f"Got {num_correct}/{num_pixels} with acc {num_correct/num_pixels*100:.2f}"
     )
@@ -158,10 +163,12 @@ def check_accuracy(loader, model, device="cuda"):
     print(
         f"Cell counting accuracy in percentage {smaller/bigger*100:.2f}"
     )
+
     print(f"Dice score: {dice_score/len(loader)}")
     model.train()
 
 def save_predictions_as_imgs(
+<<<<<<< HEAD
     loader, model, folder="saved_images_UNet3_uncertainty/", device="cuda"
 ):
     model.eval()
@@ -209,4 +216,5 @@ def save_predictions_as_imgs(
             break
         else:
             counter +=1
+
     model.train()

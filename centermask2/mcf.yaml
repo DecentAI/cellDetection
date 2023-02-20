@@ -3,7 +3,7 @@ MODEL:
   BACKBONE:
     NAME: "build_fcos_vovnet_fpn_backbone"
     FREEZE_AT: 0
-  WEIGHTS: "http://livecell-dataset.s3.eu-central-1.amazonaws.com/LIVECell_dataset_2021/models/Anchor_free/ALL/LIVECell_anchor_free_model.pth"
+  WEIGHTS: "vovnet99_ese_detectron2.pth"
   VOVNET:
     CONV_BODY : "V-99-eSE"
     OUT_FEATURES: ["stage3", "stage4", "stage5"]
