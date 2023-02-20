@@ -1,0 +1,1 @@
+python train.py --mode test --best_pth UNet3_large_epoch_0.pth.tar

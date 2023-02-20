@@ -61,18 +61,9 @@ def check_accuracy(loader, model, device="cuda"):
     with torch.no_grad():
         for x, y in loader:
             real = y
-            # print("shape : ", real.shape)
             ch,h,w = real.shape
-            # print("To be sure : ", ch, h, w)
             real = torch.unsqueeze(real, dim=0)
             real = F.interpolate(real, size=((h//32)*32, (w//32)*32), mode='bilinear', align_corners=True)
-            # if(w%32!=0):
-            #     #case when width is not divisible by 8
-            #     real = F.interpolate(real, size=(h, (w//32)*32), mode='bilinear', align_corners=True)
-            # print("shape after : ", real.shape)
-            # if(h%32!=0):
-            #     #case when width is not divisible by 8
-            #     real = F.interpolate(real, size=((h//32)*32, w), mode='bilinear', align_corners=True)
             real = torch.squeeze(real, dim=0)
             x = x.to(device).unsqueeze(1)
             y = real.to(device).unsqueeze(1)
