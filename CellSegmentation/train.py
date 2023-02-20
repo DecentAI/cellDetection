@@ -17,10 +17,10 @@ import albumentations as A
 from albumentations.pytorch import ToTensorV2
 import torch.nn.functional as F
 import numpy as np
+
 import argparse
 import os
 
-# hyperparams
 
 LEARNING_RATE = 1E-4
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
@@ -44,10 +44,10 @@ LOAD_MODEL = False
 # VAL_IM_DIR = r'C:\Code\Dataset\LIVECell_dataset_2021\images\images\livecell_test_images'
 # VAL_MASK_DIR = r'C:\Code\Dataset\LIVECell_dataset_2021\images\images\livecell_test_images_masks'
 
-TRAIN_IM_DIR = r'/lunit/home/stevekang/cellDetection/MCF7/LIVECell_dataset_2021/images/livecell_train_val_images'
-TRAIN_MASK_DIR = r'/lunit/home/stevekang/cellDetection/MCF7/LIVECell_dataset_2021/images/livecell_train_val_images_masks'
-VAL_IM_DIR = r'/lunit/home/stevekang/cellDetection/MCF7/LIVECell_dataset_2021/images/livecell_test_images'
-VAL_MASK_DIR = r'/lunit/home/stevekang/cellDetection/MCF7/LIVECell_dataset_2021/images/livecell_test_images_masks'
+TRAIN_IM_DIR = r'cellDetection/MCF7/LIVECell_dataset_2021/images/livecell_train_val_images'
+TRAIN_MASK_DIR = r'cellDetection/MCF7/LIVECell_dataset_2021/images/livecell_train_val_images_masks'
+VAL_IM_DIR = r'cellDetection/MCF7/LIVECell_dataset_2021/images/livecell_test_images'
+VAL_MASK_DIR = r'cellDetection/MCF7/LIVECell_dataset_2021/images/livecell_test_images_masks'
 
 
 
@@ -150,9 +150,7 @@ def main():
                 "state_dict": model.state_dict(),
                 "optimizer":optimizer.state_dict(),
             }
-
             save_checkpoint(checkpoint, filename=f"UNet3_training_epoch_{epoch}.pth.tar")
-
             # check accuracy
             check_accuracy(val_loader, model, device=DEVICE)
 
@@ -161,7 +159,6 @@ def main():
             # if not isExist:
             #     os.makedirs(img_dir)
             # save_predictions_as_imgs(val_loader, model, folder=img_dir, device=DEVICE)
-
     
 
 if __name__ == "__main__":

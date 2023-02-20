@@ -1,3 +1,4 @@
+
 import torch
 import torch.nn as nn
 from torch.nn import init
@@ -57,4 +58,5 @@ def init_weights(net, init_type='normal'):
     elif init_type == 'orthogonal':
         net.apply(weights_init_orthogonal)
     else:
+
         raise NotImplementedError('initialization method [%s] is not implemented' % init_type)
