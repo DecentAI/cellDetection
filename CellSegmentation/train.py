@@ -16,7 +16,6 @@ from utils import (
 import albumentations as A
 from albumentations.pytorch import ToTensorV2
 import torch.nn.functional as F
-<<<<<<< HEAD
 import numpy as np
 # hyperparams
 
@@ -42,10 +41,10 @@ LOAD_MODEL = False
 # VAL_IM_DIR = r'C:\Code\Dataset\LIVECell_dataset_2021\images\images\livecell_test_images'
 # VAL_MASK_DIR = r'C:\Code\Dataset\LIVECell_dataset_2021\images\images\livecell_test_images_masks'
 
-TRAIN_IM_DIR = r'/lunit/home/stevekang/decentAI/cellDetection/MCF7/LIVECell_dataset_2021/images/livecell_train_val_images'
-TRAIN_MASK_DIR = r'/lunit/home/stevekang/decentAI/cellDetection/MCF7/LIVECell_dataset_2021/images/livecell_train_val_images_masks'
-VAL_IM_DIR = r'/lunit/home/stevekang/decentAI/cellDetection/MCF7/LIVECell_dataset_2021/images/livecell_test_images'
-VAL_MASK_DIR = r'/lunit/home/stevekang/decentAI/cellDetection/MCF7/LIVECell_dataset_2021/images/livecell_test_images_masks'
+TRAIN_IM_DIR = r'decentAI/cellDetection/MCF7/LIVECell_dataset_2021/images/livecell_train_val_images'
+TRAIN_MASK_DIR = r'decentAI/cellDetection/MCF7/LIVECell_dataset_2021/images/livecell_train_val_images_masks'
+VAL_IM_DIR = r'decentAI/cellDetection/MCF7/LIVECell_dataset_2021/images/livecell_test_images'
+VAL_MASK_DIR = r'decentAI/cellDetection/MCF7/LIVECell_dataset_2021/images/livecell_test_images_masks'
 
 
 

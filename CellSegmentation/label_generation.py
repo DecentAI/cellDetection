@@ -9,11 +9,11 @@ import os
 from tqdm import tqdm
 
 
-dir_to_test_ims = r'/lunit/home/stevekang/decentAI/cellDetection/MCF7/LIVECell_dataset_2021/images/livecell_test_images'
-dir_to_train_ims = r'/lunit/home/stevekang/decentAI/cellDetection/MCF7/LIVECell_dataset_2021/images/livecell_train_val_images'
-dir_to_val_labels = r'/lunit/home/stevekang/decentAI/cellDetection/MCF7/LIVECell_dataset_2021/annotations/LIVECell_single_cells/mcf7/val.json'
-dir_to_train_labels = r'/lunit/home/stevekang/decentAI/cellDetection/MCF7/LIVECell_dataset_2021/annotations/LIVECell_single_cells/mcf7/train.json'
-dir_to_test_labels = r'/lunit/home/stevekang/decentAI/cellDetection/MCF7/LIVECell_dataset_2021/annotations/LIVECell_single_cells/mcf7/test.json'
+dir_to_test_ims = r'decentAI/cellDetection/MCF7/LIVECell_dataset_2021/images/livecell_test_images'
+dir_to_train_ims = r'decentAI/cellDetection/MCF7/LIVECell_dataset_2021/images/livecell_train_val_images'
+dir_to_val_labels = r'decentAI/cellDetection/MCF7/LIVECell_dataset_2021/annotations/LIVECell_single_cells/mcf7/val.json'
+dir_to_train_labels = r'decentAI/cellDetection/MCF7/LIVECell_dataset_2021/annotations/LIVECell_single_cells/mcf7/train.json'
+dir_to_test_labels = r'decentAI/cellDetection/MCF7/LIVECell_dataset_2021/annotations/LIVECell_single_cells/mcf7/test.json'
 
 
 # dir_to_train_labels = r'C:\Code\Dataset\LIVECell_dataset_2021\annotations\LIVECell\livecell_coco_train.json'
