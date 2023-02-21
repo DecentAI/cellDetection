@@ -1,1 +1,1 @@
-python train.py --mode test --best_pth UNet3_large_epoch_0.pth.tar
+python train.py --mode test --best_pth UNet3_no_sigmoid_MCD.pth.tar

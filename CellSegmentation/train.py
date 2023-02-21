@@ -25,29 +25,23 @@ import os
 LEARNING_RATE = 1E-4
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 BATCH_SIZE = 8
-NUM_EPOCHS = 50
 # hyperparams
 
 LEARNING_RATE = 1E-4
-DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # DEVICE = "cpu"
 BATCH_SIZE = 8
-NUM_EPOCHS = 1
+NUM_EPOCHS = 20
 
 NUM_WORKERS = 8
 IMAGE_HEIGHT = 520
 IMAGE_WIDTH = 704
 PIN_MEMORY = True
 LOAD_MODEL = False
-# TRAIN_IM_DIR = r'C:\Code\Dataset\LIVECell_dataset_2021\images\images\livecell_train_val_images'
-# TRAIN_MASK_DIR = r'C:\Code\Dataset\LIVECell_dataset_2021\images\images\livecell_train_val_images_masks'
-# VAL_IM_DIR = r'C:\Code\Dataset\LIVECell_dataset_2021\images\images\livecell_test_images'
-# VAL_MASK_DIR = r'C:\Code\Dataset\LIVECell_dataset_2021\images\images\livecell_test_images_masks'
 
-TRAIN_IM_DIR = r'cellDetection/MCF7/LIVECell_dataset_2021/images/livecell_train_val_images'
-TRAIN_MASK_DIR = r'cellDetection/MCF7/LIVECell_dataset_2021/images/livecell_train_val_images_masks'
-VAL_IM_DIR = r'cellDetection/MCF7/LIVECell_dataset_2021/images/livecell_test_images'
-VAL_MASK_DIR = r'cellDetection/MCF7/LIVECell_dataset_2021/images/livecell_test_images_masks'
+TRAIN_IM_DIR = r'/lunit/home/stevekang/cellDetection/MCF7/LIVECell_dataset_2021/images/livecell_train_val_images'
+TRAIN_MASK_DIR = r'/lunit/home/stevekang/cellDetection/MCF7/LIVECell_dataset_2021/images/livecell_train_val_images_masks'
+VAL_IM_DIR = r'/lunit/home/stevekang/cellDetection/MCF7/LIVECell_dataset_2021/images/livecell_test_images'
+VAL_MASK_DIR = r'/lunit/home/stevekang/cellDetection/MCF7/LIVECell_dataset_2021/images/livecell_test_images_masks'
 
 
 
@@ -64,7 +58,7 @@ def train_model(loader, model, optimizer, loss_fcn, scaler):
 
             _,ch,h,w = targets.shape
             targets = F.interpolate(targets, size=((h//32)*32, (w//32)*32), mode='bilinear', align_corners=True)
-
+            pred = F.interpolate(pred, size=((h//32)*32, (w//32)*32), mode='bilinear', align_corners=True)
 
             loss = loss_fcn(pred,targets)
         # backward path
@@ -127,18 +121,18 @@ def main():
 
     parser = argparse.ArgumentParser(description='test or train')
     parser.add_argument('--mode', type=str,   default="test")
-    parser.add_argument('--best_pth', type=str,   default="UNet3_large_epoch_0.pth.tar")
+    parser.add_argument('--best_pth', type=str,   default="UNet3_no_sigmoid_MCD.pth.tar")
     args = parser.parse_args()
 
     if(args.mode == "test"):
         LOAD_MODEL = True 
         load_checkpoint(torch.load(args.best_pth), model)
         check_accuracy(val_loader, model, device=DEVICE)
-        # img_dir = "saved_test_images_UNet3/"
-        # isExist = os.path.exists(img_dir)
-        # if not isExist:
-        #     os.makedirs(img_dir)
-        # save_predictions_as_imgs(val_loader, model, folder=img_dir, device=DEVICE)
+        img_dir = "saved_test_images_UNet3/"
+        isExist = os.path.exists(img_dir)
+        if not isExist:
+            os.makedirs(img_dir)
+        save_predictions_as_imgs(val_loader, model, folder=img_dir, device=DEVICE)
     if(args.mode == "train"):
         scaler = torch.cuda.amp.GradScaler()
         

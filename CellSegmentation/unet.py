@@ -73,6 +73,13 @@ class Unet(nn.Module):
         return self.out(x)
 
 
+#example = torch.rand(8,1,704,520) # no of ims, RGB channels, im widths, im heights
+#print(example.shape) 
+#myunet = Unet(1,1)
+#out = myunet.forward(example)
+#print(out.shape) 
+
+
 import numpy as np
 import torch
 import torch.nn as nn
@@ -279,32 +286,32 @@ class UNet3Plus(nn.Module):
         # print("B4 : ", inputs.shape , "Aftr : ", x.shape)
         ## -------------Encoder-------------
         h1 = self.conv1(x)  # h1->320*320*64
-
+        h1 = self.dropout(h1)
         h2 = self.maxpool1(h1)
         h2 = self.conv2(h2)  # h2->160*160*128
-
+        h2 = self.dropout(h2)
         h3 = self.maxpool2(h2)
         h3 = self.conv3(h3)  # h3->80*80*256
-
+        h3 = self.dropout(h3)
         h4 = self.maxpool3(h3)
         h4 = self.conv4(h4)  # h4->40*40*512
-
+        h4 = self.dropout(h4)
         h5 = self.maxpool4(h4)
         hd5 = self.conv5(h5)  # h5->20*20*1024
-
+        h5 = self.dropout(h5)
         ## -------------Decoder-------------
-        h1_PT_hd4 = self.h1_PT_hd4_relu(self.h1_PT_hd4_bn(self.h1_PT_hd4_conv(self.h1_PT_hd4(h1))))
-        h2_PT_hd4 = self.h2_PT_hd4_relu(self.h2_PT_hd4_bn(self.h2_PT_hd4_conv(self.h2_PT_hd4(h2))))
-        h3_PT_hd4 = self.h3_PT_hd4_relu(self.h3_PT_hd4_bn(self.h3_PT_hd4_conv(self.h3_PT_hd4(h3))))
+        h1_PT_hd4 = self.h1_PT_hd4_relu(self.h1_PT_hd4_bn(self.dropout(self.h1_PT_hd4_conv(self.h1_PT_hd4(h1)))))
+        h2_PT_hd4 = self.h2_PT_hd4_relu(self.h2_PT_hd4_bn(self.dropout( self.h2_PT_hd4_conv(self.h2_PT_hd4(h2)))))
+        h3_PT_hd4 = self.h3_PT_hd4_relu(self.h3_PT_hd4_bn(self.dropout (self.h3_PT_hd4_conv(self.h3_PT_hd4(h3)))))
         h4_Cat_hd4 = self.h4_Cat_hd4_relu(self.h4_Cat_hd4_bn(self.h4_Cat_hd4_conv(h4)))
         hd5_UT_hd4 = self.hd5_UT_hd4_relu(self.hd5_UT_hd4_bn(self.hd5_UT_hd4_conv(self.hd5_UT_hd4(hd5))))
         hd4 = self.relu4d_1(self.bn4d_1(self.conv4d_1(torch.cat((h1_PT_hd4, h2_PT_hd4, h3_PT_hd4, h4_Cat_hd4, hd5_UT_hd4), 1)))) # hd4->40*40*UpChannels
 
-        h1_PT_hd3 = self.h1_PT_hd3_relu(self.h1_PT_hd3_bn(self.h1_PT_hd3_conv(self.h1_PT_hd3(h1))))
-        h2_PT_hd3 = self.h2_PT_hd3_relu(self.h2_PT_hd3_bn(self.h2_PT_hd3_conv(self.h2_PT_hd3(h2))))
+        h1_PT_hd3 = self.h1_PT_hd3_relu(self.h1_PT_hd3_bn(self.dropout(self.h1_PT_hd3_conv(self.h1_PT_hd3(h1)))))
+        h2_PT_hd3 = self.h2_PT_hd3_relu(self.h2_PT_hd3_bn(self.dropout(self.h2_PT_hd3_conv(self.h2_PT_hd3(h2)))))
         h3_Cat_hd3 = self.h3_Cat_hd3_relu(self.h3_Cat_hd3_bn(self.h3_Cat_hd3_conv(h3)))
-        hd4_UT_hd3 = self.hd4_UT_hd3_relu(self.hd4_UT_hd3_bn(self.hd4_UT_hd3_conv(self.hd4_UT_hd3(hd4))))
-        hd5_UT_hd3 = self.hd5_UT_hd3_relu(self.hd5_UT_hd3_bn(self.hd5_UT_hd3_conv(self.hd5_UT_hd3(hd5))))
+        hd4_UT_hd3 = self.hd4_UT_hd3_relu(self.hd4_UT_hd3_bn(self.dropout( self.hd4_UT_hd3_conv(self.hd4_UT_hd3(hd4)))))
+        hd5_UT_hd3 = self.hd5_UT_hd3_relu(self.hd5_UT_hd3_bn(self.dropout(self.hd5_UT_hd3_conv(self.hd5_UT_hd3(hd5)))))
         hd3 = self.relu3d_1(self.bn3d_1(self.conv3d_1(torch.cat((h1_PT_hd3, h2_PT_hd3, h3_Cat_hd3, hd4_UT_hd3, hd5_UT_hd3), 1)))) # hd3->80*80*UpChannels
 
         h1_PT_hd2 = self.h1_PT_hd2_relu(self.h1_PT_hd2_bn(self.h1_PT_hd2_conv(self.h1_PT_hd2(h1))))
@@ -316,11 +323,11 @@ class UNet3Plus(nn.Module):
 
         h1_Cat_hd1 = self.h1_Cat_hd1_relu(self.h1_Cat_hd1_bn(self.h1_Cat_hd1_conv(h1)))
         hd2_UT_hd1 = self.hd2_UT_hd1_relu(self.hd2_UT_hd1_bn(self.hd2_UT_hd1_conv(self.hd2_UT_hd1(hd2))))
-        hd3_UT_hd1 = self.hd3_UT_hd1_relu(self.hd3_UT_hd1_bn(self.hd3_UT_hd1_conv(self.hd3_UT_hd1(hd3)))) # error here?
+        hd3_UT_hd1 = self.hd3_UT_hd1_relu(self.hd3_UT_hd1_bn(self.hd3_UT_hd1_conv(self.hd3_UT_hd1(hd3)))) 
         hd4_UT_hd1 = self.hd4_UT_hd1_relu(self.hd4_UT_hd1_bn(self.hd4_UT_hd1_conv(self.hd4_UT_hd1(hd4))))
         hd5_UT_hd1 = self.hd5_UT_hd1_relu(self.hd5_UT_hd1_bn(self.hd5_UT_hd1_conv(self.hd5_UT_hd1(hd5))))
         hd1 = self.relu1d_1(self.bn1d_1(self.conv1d_1(torch.cat((h1_Cat_hd1, hd2_UT_hd1, hd3_UT_hd1, hd4_UT_hd1, hd5_UT_hd1), 1)))) # hd1->320*320*UpChannels
 
         d1 = self.outconv1(hd1)  # d1->320*320*n_classes
-
-        return F.sigmoid(d1)
+        
+        return d1
