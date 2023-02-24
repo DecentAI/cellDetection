@@ -23,14 +23,14 @@ from detectron2.evaluation import (
     verify_results,
 )
 from centermask.evaluation import (
-    COCOEvaluator,
+    # COCOEvaluator,
     CityscapesInstanceEvaluator,
     CityscapesSemSegEvaluator
 )
 from detectron2.modeling import GeneralizedRCNNWithTTA
 from detectron2.checkpoint import DetectionCheckpointer
 from centermask.config import get_cfg
-
+from coco_evaluation import COCOEvaluator
 
 class Trainer(DefaultTrainer):
     """
