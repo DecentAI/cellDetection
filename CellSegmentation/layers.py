@@ -16,13 +16,13 @@ class unetConv2(nn.Module):
         
         if is_batchnorm:
             for i in range(1, n + 1):
-                conv = nn.Sequential(nn.Conv2d(in_size, out_size, ks, s, p),nn.Dropout(p=0.3),
+                conv = nn.Sequential(nn.Conv2d(in_size, out_size, ks, s, p),
                                      nn.BatchNorm2d(out_size), nn.ReLU(inplace=True),)
                 setattr(self, 'conv%d' % i, conv)
                 in_size = out_size
         else:
             for i in range(1, n + 1):
-                conv = nn.Sequential(nn.Conv2d(in_size, out_size, ks, s, p), nn.Dropout(p=0.3), nn.ReLU(inplace=True), )
+                conv = nn.Sequential(nn.Conv2d(in_size, out_size, ks, s, p), nn.ReLU(inplace=True), )
                 setattr(self, 'conv%d' % i, conv)
                 in_size = out_size
 

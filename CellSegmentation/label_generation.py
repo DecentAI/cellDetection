@@ -6,13 +6,15 @@ import glob as glob
 import json
 import os
 
+from tqdm import tqdm
 
 
-dir_to_test_ims = r'/lunit/home/stevekang/decentAI/MCF7/LIVECell_dataset_2021/images_mask/livecell_test_images'
-dir_to_train_ims = r'/lunit/home/stevekang/decentAI/MCF7/LIVECell_dataset_2021/images_mask/livecell_train_val_images'
-dir_to_val_labels = r'/lunit/home/stevekang/decentAI/MCF7/LIVECell_dataset_2021/annotations/LIVECell_single_cells/mcf7/val.json'
-dir_to_train_labels = r'/lunit/home/stevekang/decentAI/MCF7/LIVECell_dataset_2021/annotations/LIVECell_single_cells/mcf7/train.json'
-dir_to_test_labels = r'/lunit/home/stevekang/decentAI/MCF7/LIVECell_dataset_2021/annotations/LIVECell_single_cells/mcf7/test.json'
+dir_to_test_ims = r'decentAI/cellDetection/MCF7/LIVECell_dataset_2021/images/livecell_test_images'
+dir_to_train_ims = r'decentAI/cellDetection/MCF7/LIVECell_dataset_2021/images/livecell_train_val_images'
+dir_to_val_labels = r'decentAI/cellDetection/MCF7/LIVECell_dataset_2021/annotations/LIVECell_single_cells/mcf7/val.json'
+dir_to_train_labels = r'decentAI/cellDetection/MCF7/LIVECell_dataset_2021/annotations/LIVECell_single_cells/mcf7/train.json'
+dir_to_test_labels = r'decentAI/cellDetection/MCF7/LIVECell_dataset_2021/annotations/LIVECell_single_cells/mcf7/test.json'
+
 
 # dir_to_train_labels = r'C:\Code\Dataset\LIVECell_dataset_2021\annotations\LIVECell\livecell_coco_train.json'
 # dir_to_test_labels = r'C:\Code\Dataset\LIVECell_dataset_2021\annotations\LIVECell\livecell_coco_test.json'
@@ -102,12 +104,6 @@ def generate_segmentation_mask(im, annotation):
 
 
 
-dir_to_masks = dir_to_test_ims + '_masks'
-if not os.path.isdir(dir_to_masks):
-    os.makedirs(dir_to_masks)
-
-# load image file paths
-ims = glob.glob(dir_to_test_ims + '/*.tif')
 
 # load label json object 
 with open(dir_to_val_labels) as f:
@@ -119,11 +115,19 @@ with open(dir_to_train_labels) as f:
 with open(dir_to_test_labels) as f:
     coco_test_labels = json.load(f)
 
-# generate label masks
-for image in ims:
+
+dir_to_masks = dir_to_train_ims + '_masks'
+if not os.path.isdir(dir_to_masks):
+    os.makedirs(dir_to_masks)
+
+# load image file paths
+ims = glob.glob(dir_to_train_ims + '/*.tif')
+
+for image in tqdm(ims):
     imname = os.path.split(image)[-1]
     im = io.imread(image)
-    single_label, train_val_flag = get_image_id_by_name(imname, coco_test_labels, coco_test_labels)
-    annotations = get_annotations_by_id(single_label, train_val_flag, coco_test_labels, coco_test_labels)
+    single_label, train_val_flag = get_image_id_by_name(imname, coco_val_labels, coco_train_labels)
+    annotations = get_annotations_by_id(single_label, train_val_flag, coco_val_labels, coco_train_labels)
+
     segmentation_mask = generate_segmentation_mask(im, annotations)
     io.imsave(dir_to_masks+'/'+ imname[:-4]+'_mask.png', segmentation_mask)
